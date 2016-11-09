@@ -1,0 +1,85 @@
+Chef Server:
+
+Install chef.
+
+Checks:
+
+cat /etc/hosts
+
+1. rpm -ivh chef-server-11.1.6-1.el6.x86_64.rpm
+
+2. sudo chef-server-ctl reconfigure
+
+3. To verify
+	sudo chef-server-ctl status
+
+4. Open your workstation server, Ping your chef-server here to check the connections.
+
+5. Install chef in your workstation server
+	rpm -ivh chef-server-11.1.6-1.el6.x86_64.rpm
+
+6. In chef-server go to cd /etc/chef-server/ path to copy .pem files to your workstation.
+
+7. scp admin.pem root@workstation server IP:
+	same way copy chef-validator.pem and webui.pem
+
+8. In workstation server create ./chef folder in home directory.
+
+9. Copy those pem files in to ./chef
+
+10. In workstation server run the below command to enable ssl.
+	knife ssl fetch
+	knife ssl check
+(It Should successfully verified certification from chefserver.example.com)
+
+11. run "knife configure -i"
+
+	chefserver url: https://chefserver.example.com:443
+	name of new user: check your chef server machine /etc/passwd and give any username ex: raja
+	admin name: admin
+	location of privatekey: /root/.chef/admin.pem
+	Validation location: /root/.chef/chef-validator.pem
+	or blank: (press enter)
+	passwd for new user: set passwd
+
+12. Verify knife client list and knife user list
+
+13. Open chef node and install chef as we did in chef server and work station
+
+14. mkdir /etc/chef
+
+15. copy chef-validator.pem from chef server and move that to /etc/chef
+
+16. Goto cd /etc/chef
+
+17. knife ssl fetch -s https://chefserver.example.com
+
+18. ./chef folder will be created automatically when you run the above command.
+
+19. go to ./chef we can see trusted_certs there.
+
+20. knife ssl check -s https://chefserver.example.com
+
+21. do the below changes in /etc/chef/client.rb
+
+	log_level :info
+	log_location STDOUT
+	Chef_server_url "https://chefserver.example.com:443"
+	trusted_certs_dir "/root/.chef/trusted_certs"
+
+save this file
+
+22. chef-client -S https://chefserver.example.com -K /etc/chef/chef-validator.pem
+
+23. Now check knife client list
+
+24. knife cookbook create cookbook_name
+
+25 to debug "knife cookbook test cookbook_name"
+
+25. knife cookbook upload cookbook_name
+
+26. knife cookbook list
+
+27. run "chef-client" in chef node to execute cookbook.
+	

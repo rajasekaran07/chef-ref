@@ -1,0 +1,17 @@
+1. goto chef-repo dir
+
+2. mkdir data_bags/vhosts
+
+3. Create new bears.json file in that folder
+
+	{
+		"id" : "bears" ,
+		"port" : 80
+	}
+
+4. upload this data bags.
+	knife upload .\data_bags\vhosts
+
+5. create vhosts.rb file under cookbooks\apache\recepie\
+
+	
